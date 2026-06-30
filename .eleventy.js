@@ -5,7 +5,7 @@ module.exports = function (eleventyConfig) {
 
   // static assets copied through untouched
   eleventyConfig.addPassthroughCopy({ "src/styles.css": "styles.css" });
-  eleventyConfig.addPassthroughCopy({ "src/portrait.jpg": "portrait.jpg" });
+  eleventyConfig.addPassthroughCopy({ "src/hello.jpeg": "hello.jpeg" });
   eleventyConfig.addPassthroughCopy({ "src/CNAME": "CNAME" });
 
   // date helpers used by the templates
