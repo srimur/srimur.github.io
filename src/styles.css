@@ -1,0 +1,698 @@
+/* ============================================================
+   Minimal reading blog — design system  (v2)
+   Sans-led · pure-neutral grayscale · reading-first
+   New in v2: sticky identity rail (home), Tufte margin layout
+   (post), tap-toggle sidenotes, reading progress, no-hover fixes.
+   Edit the tokens below to retheme the whole site.
+   ============================================================ */
+
+:root {
+  /* ---- Color (true neutral grayscale; never pure #000/#fff) ---- */
+  --bg: #fcfcfc;
+  --text: #1a1a1a;
+  --text-2: #6e6e6e;
+  --text-3: #9a9a9a;
+  --rule: #e7e7e7;
+  --rule-strong: #cfcfcf;
+  --quote-rule: #d6d6d6;
+  --link-underline: #bcbcbc;
+  --code-bg: #f1f1f1;
+
+  /* ---- Type ---- */
+  --font-sans:
+    "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  --font-mono:
+    "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* ---- Layout ---- */
+  --measure: 37rem; /* ~592px reading column (mobile + home stream) */
+  --rail: 192px; /* sticky identity rail (desktop home) */
+  --rail-gap: 56px;
+  --page-x: 24px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+::selection {
+  background: #e8e8e8;
+}
+a {
+  color: inherit;
+}
+
+/* reading progress (post pages) */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--text);
+  z-index: 20;
+}
+
+/* ============================================================
+   Identity rail / masthead (shared markup, responsive role)
+   Mobile: horizontal masthead (name left, nav right)
+   Desktop home: vertical sticky rail
+   ============================================================ */
+.rail {
+  padding-top: 48px;
+}
+.rail-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.site-name {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-decoration: none;
+}
+.rail nav a {
+  font-size: 14px;
+  color: var(--text-3);
+  text-decoration: none;
+  margin-left: 18px;
+}
+.tagline {
+  font-size: 15px;
+  color: var(--text-2);
+  margin: 8px 0 0;
+}
+
+/* ============================================================
+   Homepage shell + stream
+   ============================================================ */
+.shell {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 var(--page-x);
+}
+.stream {
+  margin-top: 48px;
+}
+.year {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+  margin: 0 0 6px;
+}
+.entry {
+  display: flex;
+  gap: 22px;
+  align-items: baseline;
+  padding: 16px 0;
+  border-top: 0.5px solid var(--rule);
+  text-decoration: none;
+  color: inherit;
+}
+.entry:last-child {
+  border-bottom: 0.5px solid var(--rule);
+}
+.entry-date {
+  flex: 0 0 58px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.entry-main {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.entry-title {
+  font-size: 18px;
+  line-height: 1.4;
+  text-underline-offset: 3px;
+}
+.entry-kind {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.03em;
+  color: var(--text-3);
+}
+.entry-go {
+  flex: 0 0 auto;
+  color: var(--text-3);
+  font-size: 15px;
+  transform: translateX(0);
+}
+
+/* desktop home: rail becomes a sticky left column */
+@media (min-width: 1080px) {
+  .shell {
+    max-width: calc(var(--rail) + var(--rail-gap) + var(--measure));
+    display: grid;
+    grid-template-columns: var(--rail) minmax(0, 1fr);
+    gap: var(--rail-gap);
+  }
+  .rail {
+    position: sticky;
+    top: 56px;
+    align-self: start;
+    padding-top: 56px;
+  }
+  .rail-top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+  }
+  .rail nav {
+    margin-top: 22px;
+  }
+  .rail nav a {
+    display: block;
+    margin: 0 0 9px;
+  }
+  .stream {
+    margin-top: 56px;
+  }
+}
+
+/* ============================================================
+   Post page  — Tufte margin layout
+   ============================================================ */
+.post-wrap {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 0 var(--page-x);
+}
+.post-masthead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding-top: 48px;
+}
+.post-masthead nav a {
+  font-size: 14px;
+  color: var(--text-3);
+  text-decoration: none;
+  margin-left: 18px;
+}
+
+.post-title {
+  font-size: 33px;
+  font-weight: 500;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  margin: 44px 0 14px;
+}
+.post-meta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-3);
+  margin: 0 0 42px;
+}
+
+.prose {
+  counter-reset: sidenote-counter;
+}
+.prose p {
+  margin: 0 0 22px;
+  line-height: 1.72;
+}
+.prose h2 {
+  font-size: 21px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 42px 0 14px;
+}
+.prose h3 {
+  font-size: 17px;
+  font-weight: 500;
+  margin: 30px 0 10px;
+}
+.prose a {
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+  text-decoration-skip-ink: auto;
+  text-underline-offset: 2px;
+}
+.prose strong {
+  font-weight: 500;
+}
+.prose blockquote {
+  margin: 28px 0;
+  padding-left: 20px;
+  border-left: 2px solid var(--quote-rule);
+  color: var(--text-2);
+}
+.prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+.prose ul,
+.prose ol {
+  margin: 0 0 22px;
+  padding-left: 22px;
+}
+.prose li {
+  margin: 0 0 8px;
+  line-height: 1.6;
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  background: var(--code-bg);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.prose hr {
+  border: none;
+  border-top: 0.5px solid var(--rule);
+  margin: 40px 0;
+}
+
+/* epigraph — a quiet opening pull quote */
+.epigraph {
+  margin: 0 0 34px;
+  color: var(--text-2);
+  font-style: italic;
+  line-height: 1.55;
+}
+
+/* figures */
+.prose figure {
+  margin: 34px 0;
+}
+.prose figure svg,
+.prose figure img {
+  width: 100%;
+  display: block;
+  border-radius: 4px;
+  border: 0.5px solid var(--rule);
+}
+.prose figcaption {
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 9px;
+}
+
+/* sidenotes + margin notes */
+.sidenote-number {
+  counter-increment: sidenote-counter;
+}
+.sidenote-number::after {
+  content: counter(sidenote-counter);
+  font-family: var(--font-mono);
+  font-size: 0.62em;
+  vertical-align: super;
+  line-height: 0;
+  margin-left: 1px;
+}
+.sidenote,
+.marginnote {
+  color: var(--text-2);
+}
+.sidenote::before {
+  content: counter(sidenote-counter) " ";
+  font-family: var(--font-mono);
+  font-size: 0.7em;
+  vertical-align: super;
+  line-height: 0;
+}
+input.margin-toggle {
+  display: none;
+}
+label.sidenote-number {
+  display: inline;
+  cursor: pointer;
+}
+label.margin-toggle:not(.sidenote-number) {
+  display: none;
+}
+
+/* wide screens: notes float into the right margin (Tufte) */
+@media (min-width: 860px) {
+  .post-wrap {
+    max-width: 1060px;
+  }
+  .post-title,
+  .post-meta,
+  .epigraph,
+  .prose > p,
+  .prose > h2,
+  .prose > h3,
+  .prose > ul,
+  .prose > ol,
+  .prose > blockquote,
+  .post-footer {
+    width: 55%;
+  }
+  .prose > figure.full {
+    width: 90%;
+  }
+  .sidenote,
+  .marginnote {
+    float: right;
+    clear: right;
+    width: 46%;
+    margin-right: -54%;
+    margin-top: 3px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+    position: relative;
+  }
+  .prose figure.margin-fig {
+    float: right;
+    clear: right;
+    width: 46%;
+    margin-right: -54%;
+  }
+  .prose figure.margin-fig svg,
+  .prose figure.margin-fig img {
+    border: 0.5px solid var(--rule);
+  }
+}
+
+/* narrow screens: notes hide, reveal on tap */
+@media (max-width: 859px) {
+  label.margin-toggle:not(.sidenote-number) {
+    display: inline;
+    cursor: pointer;
+    color: var(--text-3);
+    border-bottom: 0.5px dotted var(--text-3);
+  }
+  .sidenote,
+  .marginnote {
+    display: none;
+  }
+  .margin-toggle:checked + .sidenote,
+  .margin-toggle:checked + .marginnote {
+    display: block;
+    float: none;
+    width: 100%;
+    margin: 14px 0;
+    padding: 12px 16px;
+    background: #f5f5f5;
+    border-left: 2px solid var(--rule-strong);
+    font-size: 15px;
+    line-height: 1.55;
+    position: relative;
+  }
+  .sidenote-number {
+    border-bottom: 0.5px dotted var(--text-3);
+  }
+}
+
+/* footers */
+.post-footer {
+  margin: 50px 0 0;
+  padding-top: 20px;
+  border-top: 0.5px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 14px;
+}
+.post-footer a {
+  color: var(--text-2);
+  text-decoration: none;
+}
+.post-footer .filed {
+  color: var(--text-3);
+}
+.site-footer {
+  margin: 76px 0 48px;
+  padding-top: 20px;
+  border-top: 0.5px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--text-3);
+}
+.site-footer a {
+  color: var(--text-3);
+  text-decoration: none;
+}
+
+/* ---- Hover effects: only where a real pointer exists ---- */
+@media (hover: hover) and (pointer: fine) {
+  .masthead nav a,
+  .rail nav a,
+  .post-masthead nav a,
+  .post-footer a,
+  .site-footer a {
+    transition: color 0.15s ease;
+  }
+  .rail nav a:hover,
+  .post-masthead nav a:hover,
+  .post-footer a:hover,
+  .site-footer a:hover {
+    color: var(--text);
+  }
+  .prose a {
+    transition: text-decoration-color 0.15s ease;
+  }
+  .prose a:hover {
+    text-decoration-color: var(--text);
+  }
+  .entry-go {
+    transition:
+      transform 0.15s ease,
+      color 0.15s ease;
+  }
+  .entry:hover .entry-title {
+    text-decoration: underline;
+    text-decoration-color: var(--rule-strong);
+  }
+  .entry:hover .entry-date {
+    color: var(--text-2);
+  }
+  .entry:hover .entry-go {
+    transform: translateX(4px);
+    color: var(--text);
+  }
+}
+
+/* ---- Touch / no-hover: persistent affordances instead ---- */
+@media (hover: none) {
+  .entry-title {
+    text-decoration: underline;
+    text-decoration-color: var(--rule);
+    text-underline-offset: 3px;
+  }
+}
+
+/* ---- Accessibility floor ---- */
+a:focus-visible,
+.entry:focus-visible,
+label.sidenote-number:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* ---- Mobile type ---- */
+@media (max-width: 480px) {
+  body {
+    font-size: 17px;
+  }
+  .rail {
+    padding-top: 40px;
+  }
+  .post-masthead {
+    padding-top: 40px;
+  }
+  .post-title {
+    font-size: 28px;
+  }
+  .entry {
+    gap: 16px;
+  }
+  .entry-date {
+    flex-basis: 50px;
+    font-size: 12px;
+  }
+  .entry-kind {
+    display: none;
+  }
+}
+
+/* ============================================================
+   Portfolio (root index.html)
+   ============================================================ */
+.pf-wrap {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 0 var(--page-x);
+}
+.bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  padding-top: 48px;
+}
+.bar nav a {
+  font-size: 14px;
+  color: var(--text-3);
+  text-decoration: none;
+  margin-left: 18px;
+}
+
+.pf-hero {
+  margin-top: 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+.pf-photo {
+  width: 150px;
+  flex: 0 0 auto;
+}
+.pf-photo img {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+  border-radius: 6px;
+  border: 0.5px solid var(--rule);
+  background: #ededed;
+}
+.pf-name {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+.pf-role {
+  font-size: 15px;
+  color: var(--text-2);
+  margin: 0 0 22px;
+}
+.pf-about p {
+  font-size: 18px;
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+.pf-links {
+  margin-top: 24px;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 15px;
+}
+.pf-links a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--link-underline);
+  text-underline-offset: 2px;
+}
+
+@media (min-width: 680px) {
+  .pf-hero {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 44px;
+  }
+  .pf-photo {
+    width: 240px;
+  }
+  .pf-name {
+    font-size: 32px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .bar nav a {
+    transition: color 0.15s ease;
+  }
+  .bar nav a:hover {
+    color: var(--text);
+  }
+  .pf-links a {
+    transition: text-decoration-color 0.15s ease;
+  }
+  .pf-links a:hover {
+    text-decoration-color: var(--text);
+  }
+}
+
+/* ---- Portfolio: education + internships ---- */
+.pf-cv {
+  margin-top: 60px;
+}
+.pf-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--text-3);
+  margin: 38px 0 14px;
+}
+.pf-cv .pf-label:first-child {
+  margin-top: 0;
+}
+.cv-item {
+  padding: 15px 0;
+  border-top: 0.5px solid var(--rule);
+}
+.cv-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+.cv-place {
+  font-size: 17px;
+  font-weight: 500;
+}
+.cv-date {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-3);
+  white-space: nowrap;
+}
+.cv-sub {
+  font-size: 14px;
+  color: var(--text-2);
+  margin: 4px 0 0;
+}
+.tags {
+  margin-top: 11px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-2);
+  border: 0.5px solid var(--rule);
+  border-radius: 999px;
+  padding: 3px 11px;
+}

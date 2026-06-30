@@ -1,0 +1,49 @@
+---
+layout: base.njk
+---
+<div class="progress" id="progress"></div>
+<div class="post-wrap">
+
+  <header class="post-masthead">
+    <a class="site-name" href="/notes/">Notebook</a>
+    <nav>
+      <a href="/notes/">Notes</a>
+      <a href="/">Srinath Murali</a>
+    </nav>
+  </header>
+
+  <article class="post">
+    <h1 class="post-title">{{ title }}</h1>
+    <p class="post-meta">{{ date | readableDate }} &middot; {{ kind }} &middot; {{ readtime }}</p>
+
+    <div class="prose">
+{{ content | safe }}
+    </div>
+
+    <footer class="post-footer">
+      <a href="/notes/">&larr; All notes</a>
+      <span class="filed">Filed under {{ filed }}</span>
+    </footer>
+  </article>
+
+  <footer class="site-footer">
+    <span>Notebook</span>
+    <span><a href="/">Srinath Murali</a> &middot; &copy; 2026</span>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var bar = document.getElementById('progress');
+    function update() {
+      var h = document.documentElement;
+      var max = h.scrollHeight - h.clientHeight;
+      var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max : 0;
+      bar.style.width = (pct * 100) + '%';
+    }
+    document.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+</script>

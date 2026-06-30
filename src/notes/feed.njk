@@ -1,0 +1,27 @@
+---
+permalink: /notes/feed.xml
+eleventyExcludeFromCollections: true
+metadata:
+  title: Notebook — Srinath Murali
+  subtitle: Notes, essays, and the occasional longer thing.
+  base: https://srimur.xyz
+---
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>{{ metadata.title }}</title>
+  <subtitle>{{ metadata.subtitle }}</subtitle>
+  <link href="{{ metadata.base }}/notes/feed.xml" rel="self"/>
+  <link href="{{ metadata.base }}/notes/"/>
+  <updated>{{ collections.notes | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
+  <id>{{ metadata.base }}/notes/</id>
+  <author><name>Srinath Murali</name></author>
+  {%- for post in collections.notes %}
+  <entry>
+    <title>{{ post.data.title }}</title>
+    <link href="{{ metadata.base }}{{ post.url }}"/>
+    <updated>{{ post.date | dateToRfc3339 }}</updated>
+    <id>{{ metadata.base }}{{ post.url }}</id>
+    <content type="html">{{ post.templateContent | safe }}</content>
+  </entry>
+  {%- endfor %}
+</feed>

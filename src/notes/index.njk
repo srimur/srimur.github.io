@@ -1,0 +1,38 @@
+---
+layout: base.njk
+title: Notebook — Srinath Murali
+---
+<div class="shell">
+
+  <header class="rail">
+    <div class="rail-top">
+      <a class="site-name" href="/notes/">Notebook</a>
+      <nav>
+        <a href="/">Srinath Murali</a>
+      </nav>
+    </div>
+    <p class="tagline">Notes, essays, and the occasional longer thing.</p>
+  </header>
+
+  <main class="stream">
+    {%- for group in collections.notesByYear %}
+    <p class="year">{{ group.year }}</p>
+    {%- for post in group.items %}
+    <a class="entry" href="{{ post.url }}">
+      <time class="entry-date">{{ post.date | shortDate }}</time>
+      <span class="entry-main">
+        <span class="entry-title">{{ post.data.title }}</span>
+        <span class="entry-kind">{{ post.data.kind }}</span>
+      </span>
+      <span class="entry-go" aria-hidden="true">&rarr;</span>
+    </a>
+    {%- endfor %}
+    {%- endfor %}
+
+    <footer class="site-footer">
+      <span>Notebook</span>
+      <span><a href="/">Srinath Murali</a> &middot; &copy; 2026</span>
+    </footer>
+  </main>
+
+</div>
